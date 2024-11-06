@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getCompanies, getMovies } from './API/api';
 import { Company, Movie } from './types/types';
-const SERVER_URL=import.meta.env.VITE_SERVER_URL
+import { MovieTable } from './components/molecules/MovieTable';
+import { Button } from '@mui/material';
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
 
 
@@ -40,7 +41,7 @@ export const App = () => {
 
   const refreshButton = (buttonText: any) => {
     if (!loading) {
-      return <button onClick={loadData}>{buttonText}</button>
+      return <Button variant="contained" onClick={loadData}>{buttonText}</Button>
     } else {
       return <p>No movies loaded yet</p>
     }
@@ -52,17 +53,20 @@ export const App = () => {
   return (
     <div>
       <h2>Welcome to Movie database!</h2>
-      {refreshButton("Refresh")}
       {error && <p>{error}</p>}
+      <MovieTable
+        movies={movies}
+        companies={filmCompanies}
+      />
+
+      {refreshButton("Refresh")}
       <p>Total movies displayed {movies.length}</p>
       <span>Title - Review - Film Company</span>
       <br />
-      <br/>
-        companies={filmCompanies} />
       {movies.map((movie: any) =>
         <span key={movie.title} onClick={() => { setSelectedMovie(movie) }}>
           {movie.title}
-          {movie.reviews.reduce((acc: any, i: any) => (acc + i) / movie.reviews.length, 0)?.toString().substring(0, 3)}{" "}
+          {movie.reviews.reduce((acc: any, i: any) => (acc + i) / movie.reviews.length, 0)?.toString().substring(0, 3)}
           {filmCompanies.find((f: any) => f.id === movie.filmCompanyId)?.name}
           <br />
         </span>
