@@ -2,7 +2,7 @@ import { ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
 import { Collapse, IconButton, TableCell, TableRow } from "@mui/material"
 import { Fragment, useState } from "react";
 import { Movie } from "../../../types/types"
-import { ReviewField } from "./ReviewField/ReviewField";
+import { ReviewField } from "../ReviewField/ReviewField";
 
 type MovieTableRowType = {
   movie: Movie,

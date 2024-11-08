@@ -1,6 +1,6 @@
 import { Box, Button, FormHelperText, TextField } from "@mui/material"
 import { useState } from "react";
-import { submitReview } from "../../../../API/api";
+import { submitReview } from "../../../API/api";
 import './ReviewField.css';
 
 type ReviewFieldType = {
@@ -31,7 +31,6 @@ export const ReviewField = ({ id }: ReviewFieldType) => {
     if (!response) {
       setApiError(true)
     }
-
     setReturnMessage(response);
 
     setLoading(false)
