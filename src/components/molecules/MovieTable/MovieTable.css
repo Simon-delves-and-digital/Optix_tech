@@ -1,0 +1,7 @@
+.headerCell {
+    display: flex;
+}
+
+.headerIcon {
+    padding-left: 10px;
+}

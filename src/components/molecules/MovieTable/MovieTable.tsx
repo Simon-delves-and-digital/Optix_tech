@@ -1,10 +1,30 @@
+import { ArrowCircleDown, ArrowCircleUp } from "@mui/icons-material";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useMemo, useState } from "react";
 import { Movie } from "../../../types/types";
 import { MovieTableRow } from "../../atoms/MovieTableRow/MovieTableRow";
+import './MovieTable.css';
 
 type MovieTableType = {
   movies: Movie[]
+}
+type Order = 'asc' | 'desc';
+
+const comparator = (a: Movie, b: Movie) => {
+  if (b.averageReview < a.averageReview) {
+    return -1;
+  }
+  if (b.averageReview > a.averageReview) {
+    return 1;
+  }
+  return 0;
+}
+
+const getComparitor = (order: Order) => {
+  return order === 'desc'
+    ? (a: Movie, b: Movie) => comparator(a, b)
+    : (a: Movie, b: Movie) => -comparator(a, b);
+
 }
 
 export const MovieTable = ({ movies }: MovieTableType) => {
@@ -14,6 +34,7 @@ export const MovieTable = ({ movies }: MovieTableType) => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [order, setOrder] = useState<Order>("desc");
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -23,11 +44,16 @@ export const MovieTable = ({ movies }: MovieTableType) => {
     setPage(0);
   };
 
+  const handleSortClick = () => {
+    setOrder(order === 'desc' ? "asc" : "desc")
+  }
+
   const visiblemovies = useMemo(
     () =>
       [...movies]
+        .sort(getComparitor(order))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage],
+    [page, rowsPerPage, order],
   );
 
 
@@ -37,9 +63,17 @@ export const MovieTable = ({ movies }: MovieTableType) => {
         <Table aria-label="movie table" data-testid="movieTable">
           <TableHead>
             <TableRow>
-              <TableCell/>
+              <TableCell />
               <TableCell>Title</TableCell>
-              <TableCell>Review</TableCell>
+              <TableCell>
+                <div className="headerCell ">
+                  Review
+                  {order === "asc" ?
+                    <ArrowCircleDown onClick={handleSortClick} className="headerIcon" /> :
+                    <ArrowCircleUp onClick={handleSortClick} className="headerIcon" />}
+
+                </div>
+              </TableCell>
               <TableCell>Film Company</TableCell>
             </TableRow>
           </TableHead>
