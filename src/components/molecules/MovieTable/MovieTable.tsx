@@ -14,7 +14,10 @@ export const MovieTable = ({ movies, companies }: MovieTableType) => {
 
 
   const getReviewsForMovie = (movie: Movie): string => {
-    return movie.reviews.reduce((acc: any, i: any) => (acc + i) / movie.reviews.length, 0)?.toString().substring(0, 3) || "Unknown"
+    const total = movie.reviews.reduce((partialSum, a) => partialSum + a, 0)
+    const avg = total/movie.reviews.length
+    const rounded = avg.toFixed(1)
+    return rounded || "Unknown"
   }
 
   const getCompaniesForMovie = (movie: Movie): string => {
