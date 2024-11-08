@@ -6,6 +6,14 @@ export const getMovies = async (): Promise<Movie[] | null> => {
   try {
     const response = await fetch(`${SERVER_URL}/movies`);
     const json = await response.json();
+    console.log("json: ", json);
+    const moviesWithReviews = json.map((movie: Movie) => {
+      const total = movie.reviews.reduce((partialSum, a) => partialSum + a, 0)
+      const avg = total / movie.reviews.length
+      const rounded = avg.toFixed(1)
+      return { ...movie, averageReview: rounded}
+    })
+    console.log("moviesWithReviews: ", moviesWithReviews);
     return json
   } catch (error) {
     return null
