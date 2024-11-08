@@ -17,6 +17,7 @@ export const MovieTableRow = ({ movie}: MovieTableRowType) => {
     <Fragment key={movie.id}>
       <TableRow
         key={movie.id}
+        data-testid="MovieTableRow"
       >
         <TableCell>
           <IconButton

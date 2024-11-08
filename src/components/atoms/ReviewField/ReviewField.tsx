@@ -1,5 +1,5 @@
 import { Box, Button, FormHelperText, TextField } from "@mui/material"
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { submitReview } from "../../../API/api";
 import './ReviewField.css';
 
@@ -35,7 +35,6 @@ export const ReviewField = ({ id }: ReviewFieldType) => {
 
     setLoading(false)
   }
-
   return (
     <div className="reviewField">
       <div className="reviewContainer">
@@ -44,6 +43,10 @@ export const ReviewField = ({ id }: ReviewFieldType) => {
           noValidate
           autoComplete="off"
           className="formContainer"
+          onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault()
+            !isSubmitDisabled() && submit()
+          }}
         >
           <div className="inputFieldContainer">
             <TextField
@@ -57,6 +60,7 @@ export const ReviewField = ({ id }: ReviewFieldType) => {
                 updateImput(event.target.value);
               }}
               fullWidth
+              data-testid="inputField"
             />
 
           </div>
@@ -65,11 +69,16 @@ export const ReviewField = ({ id }: ReviewFieldType) => {
 
         </Box>
 
-        <Button variant="contained" disabled={isSubmitDisabled()} onClick={submit}>Submit</Button>
-
+        <Button
+          variant="contained"
+          disabled={isSubmitDisabled()}
+          onClick={submit}
+          data-testid="submitButton">
+          Submit
+        </Button>
       </div>
 
-      <p>{returnMessage}</p>
+      <p data-testid="returnMessage">{returnMessage}</p>
       {apiError && <p className="errorText">Error submiting review, please try again later.</p>}
     </div>
   )

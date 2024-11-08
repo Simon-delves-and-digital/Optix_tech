@@ -9,7 +9,7 @@ type MovieTableType = {
 
 export const MovieTable = ({ movies }: MovieTableType) => {
   if (!movies.length) {
-    return <p>No data to display</p>
+    return <p data-testid="noDataText">No data to display</p>
   }
 
   const [page, setPage] = useState(0);
@@ -34,10 +34,10 @@ export const MovieTable = ({ movies }: MovieTableType) => {
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table aria-label="simple table">
+        <Table aria-label="movie table" data-testid="movieTable">
           <TableHead>
             <TableRow>
-              <TableCell />
+              <TableCell/>
               <TableCell>Title</TableCell>
               <TableCell>Review</TableCell>
               <TableCell>Film Company</TableCell>
@@ -61,6 +61,7 @@ export const MovieTable = ({ movies }: MovieTableType) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          data-testid="movieTablePagination"
         />
       </TableContainer>
     </div>
