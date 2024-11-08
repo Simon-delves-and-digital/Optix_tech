@@ -6,16 +6,10 @@ import { ReviewField } from "../ReviewField/ReviewField";
 
 type MovieTableRowType = {
   movie: Movie,
-  getReviewsForMovie: (movie: Movie) => string,
-  getCompaniesForMovie: (movie: Movie) => string,
 }
 
 
-export const MovieTableRow = (
-  { movie,
-    getReviewsForMovie,
-    getCompaniesForMovie
-  }: MovieTableRowType) => {
+export const MovieTableRow = ({ movie}: MovieTableRowType) => {
   const [expanded, setExpanded] = useState(false);
 
 
@@ -36,8 +30,8 @@ export const MovieTableRow = (
         <TableCell component="th" scope="row">
           {movie.title}
         </TableCell>
-        <TableCell>{getReviewsForMovie(movie)}</TableCell>
-        <TableCell>{getCompaniesForMovie(movie)}</TableCell>
+        <TableCell>{movie.averageReview}</TableCell>
+        <TableCell>{movie.company}</TableCell>
       </TableRow>
 
       <TableRow>

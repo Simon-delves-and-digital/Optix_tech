@@ -1,27 +1,15 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useMemo, useState } from "react";
-import { Company, Movie } from "../../../types/types";
+import { Movie } from "../../../types/types";
 import { MovieTableRow } from "../../atoms/MovieTableRow/MovieTableRow";
 
 type MovieTableType = {
-  movies: Movie[], companies: Company[]
+  movies: Movie[]
 }
 
-export const MovieTable = ({ movies, companies }: MovieTableType) => {
+export const MovieTable = ({ movies }: MovieTableType) => {
   if (!movies.length) {
     return <p>No data to display</p>
-  }
-
-
-  const getReviewsForMovie = (movie: Movie): string => {
-    const total = movie.reviews.reduce((partialSum, a) => partialSum + a, 0)
-    const avg = total/movie.reviews.length
-    const rounded = avg.toFixed(1)
-    return rounded || "Unknown"
-  }
-
-  const getCompaniesForMovie = (movie: Movie): string => {
-    return companies.find((f: any) => f.id === movie.filmCompanyId)?.name || "Unknown company"
   }
 
   const [page, setPage] = useState(0);
@@ -59,8 +47,6 @@ export const MovieTable = ({ movies, companies }: MovieTableType) => {
             {visiblemovies.map((movie: Movie) => (
               <MovieTableRow
                 movie={movie}
-                getReviewsForMovie={getReviewsForMovie}
-                getCompaniesForMovie={getCompaniesForMovie}
               />
             ))}
 

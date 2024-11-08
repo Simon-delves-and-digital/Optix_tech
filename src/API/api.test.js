@@ -3,12 +3,50 @@ import { getCompanies, getMovies, submitReview } from './api';
 
 global.fetch = vi.fn()
 
+const mockMovieData = [
+  {
+    id: 1,
+    reviews: [2, 3, 4],
+    title: "A test movie",
+    filmCompanyId: 1,
+    cost: 123,
+    releaseYear: 321
+  }
+]
+
+const mockCompanyData = [
+  {
+    id: 1,
+    name: "Test Company"
+  },
+]
+
+
+
 const mockFetchResponse = (data) => {
   return { json: () => new Promise((resolve) => resolve(data)) }
 }
 
-const mockFetcherror = () => {
-  throw "error"
+const createFetchMock = (sucessful = true) => {
+  return async (url) => {
+    if (url === "http://localhost:3000/movies") {
+      return Promise.resolve({
+        json: () => Promise.resolve(mockMovieData)
+      })
+    }
+    else {
+
+      return sucessful ?
+        Promise.resolve({
+          json: () => Promise.resolve(mockCompanyData)
+        })
+        :
+        Promise.resolve({
+          json: () => Promise.resolve(new Error('Async error'))
+        })
+
+    }
+  }
 }
 
 describe('getMovies', () => {
@@ -17,13 +55,36 @@ describe('getMovies', () => {
   })
 
   it('getMovies returns film list on sucessful call', async () => {
-    const mockResultTata = ["test movie"]
+    const ExpectedResult = [{
+      averageReview: "3.0",
+      company: "Test Company",
+      id: 1,
+      title: "A test movie",
+    }]
+    fetch.mockImplementation(createFetchMock(true))
 
-    fetch.mockResolvedValue(mockFetchResponse(mockResultTata))
 
     let result = await getMovies()
 
-    expect(result).toEqual(mockResultTata)
+
+    expect(result).toEqual(ExpectedResult)
+
+  });
+
+  it('getMovies returns film list with error text when filmCompany api request fails', async () => {
+    const ExpectedResult = [{
+      averageReview: "3.0",
+      company: "--error retriving company data--",
+      id: 1,
+      title: "A test movie",
+    }]
+    fetch.mockImplementation(createFetchMock(false))
+
+
+    let result = await getMovies()
+
+
+    expect(result).toEqual(ExpectedResult)
 
   });
 
@@ -39,41 +100,13 @@ describe('getMovies', () => {
 });
 
 
-
-describe('getCompanies', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  it('getCompanies returns film list on sucessful call', async () => {
-    const mockResultTata = ["test company"]
-
-    fetch.mockResolvedValue(mockFetchResponse(mockResultTata))
-
-    let result = await getCompanies()
-
-    expect(result).toEqual(mockResultTata)
-
-  });
-
-
-  it('getCompanies returns null on unsucessful call', async () => {
-    fetch.mockRejectedValue(new Error('Async error'))
-
-    let result = await getCompanies()
-
-    expect(result).toEqual(null)
-
-  });
-});
-
 describe('submitReview', () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
   it('submitReview returns api message on sucessful call', async () => {
-    const mockResultTata = {message: "test response"}
+    const mockResultTata = { message: "test response" }
 
     fetch.mockResolvedValue(mockFetchResponse(mockResultTata))
 

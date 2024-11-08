@@ -1,6 +1,14 @@
 export type Movie = {
 
     id: string,
+    title: string,
+    averageReview: string,
+    company: string,
+}
+
+export type MovieApiReuslt = {
+
+    id: string,
     reviews: number[],
     title: string,
     filmCompanyId: string,
@@ -8,7 +16,7 @@ export type Movie = {
     releaseYear: number
 }
 
-export type Company = {
+export type CompanyApiReuslt = {
     id: number,
     name: string
 }
