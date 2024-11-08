@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getCompanies, getMovies } from './api';
+import { getCompanies, getMovies, submitReview } from './api';
 
 global.fetch = vi.fn()
 
@@ -63,6 +63,32 @@ describe('getCompanies', () => {
     let result = await getCompanies()
 
     expect(result).toEqual(null)
+
+  });
+});
+
+describe('submitReview', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('submitReview returns api message on sucessful call', async () => {
+    const mockResultTata = {message: "test response"}
+
+    fetch.mockResolvedValue(mockFetchResponse(mockResultTata))
+
+    let result = await submitReview()
+
+    expect(result).toEqual(mockResultTata.message)
+
+  });
+
+  it('submitReview returns empty string on unsucessful call', async () => {
+    fetch.mockRejectedValue(new Error('Async error'))
+
+    let result = await submitReview()
+
+    expect(result).toEqual("")
 
   });
 });

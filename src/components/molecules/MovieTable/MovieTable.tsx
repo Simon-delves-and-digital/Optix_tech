@@ -1,6 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useMemo, useState } from "react";
-import { Company, Movie } from "../../types/types";
+import { Company, Movie } from "../../../types/types";
+import { MovieTableRow } from "../../atoms/MovieTableRow/MovieTableRow";
 
 type MovieTableType = {
   movies: Movie[], companies: Company[]
@@ -45,6 +46,7 @@ export const MovieTable = ({ movies, companies }: MovieTableType) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell />
               <TableCell>Title</TableCell>
               <TableCell>Review</TableCell>
               <TableCell>Film Company</TableCell>
@@ -52,15 +54,11 @@ export const MovieTable = ({ movies, companies }: MovieTableType) => {
           </TableHead>
           <TableBody>
             {visiblemovies.map((movie: Movie) => (
-              <TableRow
-                key={movie.id}
-              >
-                <TableCell component="th" scope="row">
-                  {movie.title}
-                </TableCell>
-                <TableCell>{getReviewsForMovie(movie)}</TableCell>
-                <TableCell>{getCompaniesForMovie(movie)}</TableCell>
-              </TableRow>
+              <MovieTableRow
+                movie={movie}
+                getReviewsForMovie={getReviewsForMovie}
+                getCompaniesForMovie={getCompaniesForMovie}
+              />
             ))}
 
           </TableBody>

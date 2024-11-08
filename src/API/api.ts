@@ -21,3 +21,18 @@ export const getCompanies = async (): Promise<Company[] | null> => {
     return null
   }
 }
+
+export const submitReview = async (): Promise<string> => {
+  try {
+    const response = await fetch(`${SERVER_URL}/submitReview`, {
+      method: "POST",
+    });
+
+    const json = await response.json();
+
+    return json.message
+
+  } catch (error) {
+    return ""
+  }
+}

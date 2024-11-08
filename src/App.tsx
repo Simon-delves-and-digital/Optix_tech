@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getCompanies, getMovies } from './API/api';
 import { Company, Movie } from './types/types';
-import { MovieTable } from './components/molecules/MovieTable';
+import { MovieTable } from './components/molecules/MovieTable/MovieTable';
 import { Button } from '@mui/material';
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
 
@@ -11,8 +11,6 @@ export const App = () => {
   const [filmCompanies, setFilmCompanies] = useState([] as Company[]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   const loadData = async () => {
     setError("");
@@ -39,13 +37,10 @@ export const App = () => {
     setLoading(false)
   }
 
-  const refreshButton = (buttonText: any) => {
-    if (!loading) {
-      return <Button variant="contained" onClick={loadData}>{buttonText}</Button>
-    } else {
-      return <p>No movies loaded yet</p>
-    }
+  const refreshButton = (buttonText: string) => {
+    return <Button disabled={loading} variant="contained" onClick={loadData}>{buttonText}</Button>
   };
+
   useEffect(() => {
     loadData()
   }, [SERVER_URL]);
@@ -60,29 +55,6 @@ export const App = () => {
       />
 
       {refreshButton("Refresh")}
-      <p>Total movies displayed {movies.length}</p>
-      <span>Title - Review - Film Company</span>
-      <br />
-      {movies.map((movie: any) =>
-        <span key={movie.title} onClick={() => { setSelectedMovie(movie) }}>
-          {movie.title}
-          {movie.reviews.reduce((acc: any, i: any) => (acc + i) / movie.reviews.length, 0)?.toString().substring(0, 3)}
-          {filmCompanies.find((f: any) => f.id === movie.filmCompanyId)?.name}
-          <br />
-        </span>
-      )}
-      <br />
-      <div>
-        {selectedMovie ? selectedMovie.title as any ? "You have selected " + selectedMovie.title as any : "No Movie Title" : "No Movie Selcted"}
-        {selectedMovie && <p>Please leave a review below</p>}
-        {selectedMovie &&
-          <form onSubmit={() => { }}>
-            <label>
-              Review:
-              <input type="text" />
-            </label>
-          </form>}
-      </div>
     </div>
   );
 }
